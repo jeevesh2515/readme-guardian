@@ -207,6 +207,41 @@ old routes
         self.assertIn("--run-checks", readme_sync.HOOK_TEMPLATE)
         self.assertIn("already has uncommitted changes", readme_sync.HOOK_TEMPLATE)
         self.assertNotIn("commit --amend", readme_sync.HOOK_TEMPLATE)
+    def test_stats_table_generation_with_custom_metrics(self):
+        info = {
+            "type": "python",
+            "version": "1.1.2",
+            "tests": 15,
+            "test_status": "passed",
+            "lint_pass": True,
+            "has_docker": True,
+            "is_monorepo": False,
+        }
+        table = readme_sync._stats_content(info)
+        self.assertIn("15 passing", table)
+        self.assertIn("clean", table)
+        self.assertIn("yes", table)
+
+    def test_empty_routes_returns_clean_fallback(self):
+        table = readme_sync._routes_content({"routes": []})
+        self.assertIn("No API routes detected.", table)
+
+    def test_module_detection_ignores_hidden_dirs(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / ".hidden/secret.py", "pass")
+            write(root / "src/core.py", "pass")
+            with cwd(root):
+                modules = readme_sync.collect_modules({"type": "python"})
+                self.assertNotIn(".hidden", str(modules))
+
+    def test_pyproject_version_fallback_handling(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            write(root / "pyproject.toml", '[project]\nname = "test-pkg"\n')
+            with cwd(root):
+                info = readme_sync.detect_project(root)
+                self.assertEqual(info["name"], "test-pkg")
 
 
 if __name__ == "__main__":
