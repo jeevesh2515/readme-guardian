@@ -653,7 +653,7 @@ def _quick_start(info: dict) -> str:
             "```",
         ]
         if info.get("build_command"):
-            lines.insert(3, f"")
+            lines.insert(3, "")
             lines.insert(4, "# Build for production")
             lines.insert(5, "npm run build")
         return "\n".join(lines) + "\n"

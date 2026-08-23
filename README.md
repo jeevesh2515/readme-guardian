@@ -27,9 +27,9 @@
 |--------|-------|
 | Language | python |
 | Version | 1.1.2 |
-| Tests | not configured |
-| Lint | — |
-| Docker | no |
+| Tests | 15 passing (100%) |
+| Lint | ruff passing |
+| Docker | supported |
 | Monorepo | no |
 
 <!-- /readme-guardian -->
