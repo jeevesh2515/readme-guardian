@@ -36,5 +36,5 @@ readme-sync = "readme_sync:main"
 include = ["readme_sync*"]
 
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=83.0.0", "wheel"]
 build-backend = "setuptools.build_meta"
